@@ -44,10 +44,14 @@ class Clock extends React.Component {
     })
     counter = setInterval(() => {
         let currentTime = this.state.currentTime - 100
-        this.setState({
-          currentTime: currentTime,
-          currentTimeDisplay: this.formatTime(currentTime)
-        });
+        if (currentTime > 0) {
+          this.setState({
+            currentTime: currentTime,
+            currentTimeDisplay: this.formatTime(currentTime)
+          });
+        } else{
+          this.stop();
+        }
       }, 100)
   }
   stop(){
