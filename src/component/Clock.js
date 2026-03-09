@@ -7,21 +7,40 @@ class Clock extends React.Component {
   constructor(props){
     super(props)
     this.state ={
-      time: 1,
+      breakTime: 5,
+      sessionTime:25,
       currentTimeType: 'Session'
     }
     this.setTime = this.setTime.bind(this)
+    this.changeBreakTime = this.changeBreakTime.bind(this)
+    this.changeSessionTime = this.changeSessionTime.bind(this)
+  }
+  changeBreakTime(change){
+    let time = this.state.breakTime+(change)
+    if(time >= 1 && time <=60){
+      this.setState({
+        breakTime:time
+      })
+    }
+  }
+  changeSessionTime(change){
+    let time = this.state.sessionTime+(change)
+    if(time >= 1 && time <=60){
+      this.setState({
+        sessionTime:time
+      })
+    }
   }
   setTime(){
-    return this.state.time+':00'
+    return this.state.sessionTime+':00'
   }
   render(){
     return(
       <div id="clock">
         <div id="title">Interval clock</div>
         <div id="time-settings">
-          <TimeController title="Break Time" time="5" />
-          <TimeController title="Session Time" time={this.state.time} />
+          <TimeController changeTime={this.changeBreakTime} title="Break Time" time={this.state.breakTime} />
+          <TimeController changeTime={this.changeSessionTime} title="Session Time" time={this.state.sessionTime} />
         </div>
         <div id="timer">
           <p>{this.state.currentTimeType}</p>

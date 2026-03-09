@@ -45,6 +45,9 @@ body{
 .time-setter{
   font-size: 1.5em;
 }
+.time-setter span{
+  cursor: pointer;
+}
 #controls{
   font-size: 1.5em;
 }
