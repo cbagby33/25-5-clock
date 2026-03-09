@@ -3,6 +3,9 @@ import './App.css';
 // React dependencies
 import React from 'react';
 
+// React Component
+import TimeController from './component/TimeController'
+
 // Font Awesome dependencies
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { library } from '@fortawesome/fontawesome-svg-core'
@@ -16,14 +19,8 @@ function App() {
     <div className="App">
       <div id="title">Interval clock</div>
       <div id="time-choices">
-        <div className="time-choice">
-          <div>Break Time</div>
-          <div className="time-setter"><FontAwesomeIcon icon="fa-solid fa-minus" />5<FontAwesomeIcon icon="fa-solid fa-plus" /></div>
-        </div>
-        <div className="time-choice">
-          <div>Session Time</div>
-          <div className="time-setter"><FontAwesomeIcon icon="fa-solid fa-minus" />25<FontAwesomeIcon icon="fa-solid fa-plus" /></div>
-        </div>
+        <TimeController title="Break Time" time="5" />
+        <TimeController title="Session Time" time="25" />
       </div>
       <div id="timer">25:00</div>
       <div id="controls"><FontAwesomeIcon icon="fa-solid fa-play" /><FontAwesomeIcon icon="fa-solid fa-pause" /><FontAwesomeIcon icon="fa-solid fa-arrow-rotate-left" /></div>
