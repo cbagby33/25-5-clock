@@ -12,15 +12,13 @@ class Clock extends React.Component {
       breakTime: 5,
       sessionTime:1,
       currentTimeType: 'Session',
-      currentTime: 10000,
+      currentTime: 60000,
+      currentTimeDisplay: '1:00',
       currentClockState: 'paused'
     }
-    this.setTime = this.setTime.bind(this)
     this.changeBreakTime = this.changeBreakTime.bind(this)
     this.changeSessionTime = this.changeSessionTime.bind(this)
     this.startStopTimer = this.startStopTimer.bind(this)
-
-    console.log(this.props);
   }
   changeBreakTime(change){
     let time = this.state.breakTime+(change)
@@ -35,7 +33,7 @@ class Clock extends React.Component {
     if(time >= 1 && time <=60){
       this.setState({
         sessionTime:time,
-        currentTime: time*10000
+        currentTime: time*60000
       });
     }
   }
@@ -45,8 +43,10 @@ class Clock extends React.Component {
       currentClockState: 'running'
     })
     counter = setInterval(() => {
+        let currentTime = this.state.currentTime - 100
         this.setState({
-          currentTime: this.state.currentTime - 100
+          currentTime: currentTime,
+          currentTimeDisplay: this.formatTime(currentTime)
         });
       }, 100)
   }
@@ -65,8 +65,15 @@ class Clock extends React.Component {
       this.stop()
     }
   }
-  setTime(){
-    return this.state.sessionTime+':00'
+  formatTime(time){
+    let minutes = Math.floor((time / 60000))
+    let seconds = String(Math.floor((time % 60000) / 1000))
+
+    if(seconds.length < 2){
+      seconds = '0'+seconds
+    }
+
+    return minutes+':'+seconds
   }
   render(){
     return(
@@ -78,16 +85,12 @@ class Clock extends React.Component {
         </div>
         <div id="timer">
           <p>{this.state.currentTimeType}</p>
-          <div>{this.state.currentTime}</div>
+          <div>{this.state.currentTimeDisplay}</div>
         </div>
         <Controls startStopTimer={this.startStopTimer} />
       </div>
     )
   }
-}
-
-Clock.defaultProps = {
-  counter: ''
 }
 
 export default Clock;
