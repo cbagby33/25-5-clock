@@ -13,11 +13,14 @@ class Controls extends React.Component {
   constructor(props){
     super(props)
   }
+
   render(){
     return(
       <div id="controls">
-        <FontAwesomeIcon icon="fa-solid fa-play" />
-        <FontAwesomeIcon icon="fa-solid fa-pause" />
+        <div id="play-pause" onClick={this.props.startStopTimer}>
+            <FontAwesomeIcon icon="fa-solid fa-play" />
+            <FontAwesomeIcon id="pause" icon="fa-solid fa-pause" />
+        </div>
         <FontAwesomeIcon icon="fa-solid fa-arrow-rotate-left" />
       </div>
     )

@@ -49,5 +49,11 @@ body{
   cursor: pointer;
 }
 #controls{
+  display: flex;
+  justify-content: center;
+  align-items: center;
   font-size: 1.5em;
+}
+#pause{
+  margin-left: -11px; 
 }
