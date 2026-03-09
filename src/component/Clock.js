@@ -18,7 +18,8 @@ class Clock extends React.Component {
     }
     this.changeBreakTime = this.changeBreakTime.bind(this)
     this.changeSessionTime = this.changeSessionTime.bind(this)
-    this.startStopTimer = this.startStopTimer.bind(this)
+    this.startStopClock = this.startStopClock.bind(this)
+    this.resetClock = this.resetClock.bind(this)
   }
   changeBreakTime(change){
     let time = this.state.breakTime+(change)
@@ -33,7 +34,8 @@ class Clock extends React.Component {
     if(time >= 1 && time <=60){
       this.setState({
         sessionTime:time,
-        currentTime: time*60000
+        currentTime: time*60000,
+        currentTimeDisplay: this.formatTime(time*60000)
       });
     }
   }
@@ -62,12 +64,22 @@ class Clock extends React.Component {
     })
     clearInterval(counter);
   }
-  startStopTimer(){
+  startStopClock(){
     if(this.state.currentClockState === 'paused'){
         this.start()
     } else{
       this.stop()
     }
+  }
+  resetClock(){
+    this.setState({
+      breakTime: 5,
+      sessionTime:25,
+      currentTimeType: 'Session',
+      currentTime: 25*60000,
+      currentTimeDisplay: this.formatTime(25*60000),
+      currentClockState: 'paused'
+    })
   }
   formatTime(time){
     let minutes = Math.floor((time / 60000))
@@ -91,7 +103,7 @@ class Clock extends React.Component {
           <p>{this.state.currentTimeType}</p>
           <div>{this.state.currentTimeDisplay}</div>
         </div>
-        <Controls startStopTimer={this.startStopTimer} />
+        <Controls startStopClock={this.startStopClock} resetClock={this.resetClock}/>
       </div>
     )
   }
