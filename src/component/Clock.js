@@ -12,9 +12,10 @@ class Clock extends React.Component {
       breakTime: 5,
       sessionTime:1,
       currentTimeType: 'Session',
-      currentTime: 60000,
+      currentTime: 3000,
       currentTimeDisplay: '1:00',
-      currentClockState: 'paused'
+      currentClockState: 'paused',
+      color:'yellow'
     }
     this.changeBreakTime = this.changeBreakTime.bind(this)
     this.changeSessionTime = this.changeSessionTime.bind(this)
@@ -45,24 +46,42 @@ class Clock extends React.Component {
       currentClockState: 'running'
     })
     counter = setInterval(() => {
-        let currentTime = this.state.currentTime - 100
-        if (currentTime > 0) {
+        let currentTime = this.state.currentTime - 1000
+        console.log(currentTime)
+        if(currentTime < 60000 && this.state.color === 'yellow'){
           this.setState({
-            currentTime: currentTime,
-            currentTimeDisplay: this.formatTime(currentTime)
-          });
-        } else{
+            color:'red'
+          })
+        }
+        this.setState({
+          currentTime: currentTime,
+          currentTimeDisplay: this.formatTime(currentTime)
+        });
+        if (this.state.currentTime === 0) {
           this.stop();
         }
-      }, 100)
+      }, 1000)
   }
   stop(){
     console.log('stop');
-    
     this.setState({
       currentClockState: 'paused'
     })
     clearInterval(counter);
+    
+    if(this.state.currentTimeType === 'Session' && this.state.currentTime === 0){
+      console.log('shit')
+      // play sound
+      // set state for break time
+      this.setState({
+          currentTimeType: 'Break',
+          currentTime: this.state.breakTime*60000,
+          currentTimeDisplay: this.formatTime(this.state.breakTime*60000),
+          color:'yellow'
+      });
+      // start break
+      this.start();
+    }
   }
   startStopClock(){
     if(this.state.currentClockState === 'paused'){
@@ -72,13 +91,16 @@ class Clock extends React.Component {
     }
   }
   resetClock(){
+    if (this.state.currentClockState === 'running') {
+      this.stop();
+    }
     this.setState({
       breakTime: 5,
       sessionTime:25,
       currentTimeType: 'Session',
       currentTime: 25*60000,
       currentTimeDisplay: this.formatTime(25*60000),
-      currentClockState: 'paused'
+      color:'yellow'
     })
   }
   formatTime(time){
@@ -99,9 +121,9 @@ class Clock extends React.Component {
           <TimeController changeTime={this.changeBreakTime} title="Break Time" time={this.state.breakTime} />
           <TimeController changeTime={this.changeSessionTime} title="Session Time" time={this.state.sessionTime} />
         </div>
-        <div id="timer">
-          <p>{this.state.currentTimeType}</p>
-          <div>{this.state.currentTimeDisplay}</div>
+        <div id="timer" style={{borderColor: `${this.state.color}`}}>
+          <p style={{color: `${this.state.color}`}}>{this.state.currentTimeType}</p>
+          <div style={{color: `${this.state.color}`}}>{this.state.currentTimeDisplay}</div>
         </div>
         <Controls startStopClock={this.startStopClock} resetClock={this.resetClock}/>
       </div>
