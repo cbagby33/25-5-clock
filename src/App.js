@@ -6,6 +6,7 @@ import Clock from './component/Clock'
 
 function App() {
   return (
+    // Component for clock
     <Clock />
   );
 }

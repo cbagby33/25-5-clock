@@ -14,9 +14,11 @@ class TimeController extends React.Component {
 		this.decrement = this.decrement.bind(this)
 		this.increment = this.increment.bind(this)
 	}
+	// decrement time
 	decrement(){
 		this.props.changeTime(-1)
 	}
+	// increment time
 	increment(){
 		this.props.changeTime(1)
 	}

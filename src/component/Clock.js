@@ -3,35 +3,49 @@ import React from 'react';
 import TimeController from './TimeController'
 import Controls from './Controls'
 
+// Counter for clock interval
 let counter = null;
 
+// Clock component
 class Clock extends React.Component {
   constructor(props){
     super(props)
+    // Clock component state defaults
     this.state ={
-      breakTime: 5,
-      sessionTime:1,
-      currentTimeType: 'Session',
-      currentTime: 3000,
-      currentTimeDisplay: '1:00',
-      currentClockState: 'paused',
-      color:'yellow'
+      breakTime: 5, // default countdown time for break
+      sessionTime:1, // default countdown time for session
+      currentTimeType: 'Session', // Session or Break time
+      currentTime: 3000, // current time in milliseconds
+      currentTimeDisplay: '1:00', // current time displayed on clock; used
+      currentClockState: 'paused', // running or paused
+      color:'yellow' // color of clock
     }
+
+    // methods that will be passed to child components
     this.changeBreakTime = this.changeBreakTime.bind(this)
     this.changeSessionTime = this.changeSessionTime.bind(this)
     this.startStopClock = this.startStopClock.bind(this)
     this.resetClock = this.resetClock.bind(this)
   }
+
+  // Function used to set amount of break time
   changeBreakTime(change){
+    // change is +1 or -1
+    // set new time based on incrementing or decrementing time
     let time = this.state.breakTime+(change)
+    // only allow time to be set between 1 and 60 
     if(time >= 1 && time <=60){
       this.setState({
         breakTime:time
       });
     }
   }
+  // Function used to set amount of session time
   changeSessionTime(change){
+    // change is +1 or -1
+    // set new time based on incrementing or decrementing time
     let time = this.state.sessionTime+(change)
+    // only allow time to be set between 1 and 60 
     if(time >= 1 && time <=60){
       this.setState({
         sessionTime:time,
@@ -40,15 +54,17 @@ class Clock extends React.Component {
       });
     }
   }
+  // function used to handle clock actions while clock is running
   start(){
-    console.log('start');
+    // change clock state to running
     this.setState({
       currentClockState: 'running'
     })
+    // set interval for countdown
     counter = setInterval(() => {
+        // update current time every second
         let currentTime = this.state.currentTime - 1000
-        console.log(currentTime)
-        if(currentTime < 60000 && this.state.color === 'yellow'){
+        if(currentTime < 60000 && this.state.color === 'yellow'){ // change clock to red when time is under a min
           this.setState({
             color:'red'
           })
@@ -57,18 +73,20 @@ class Clock extends React.Component {
           currentTime: currentTime,
           currentTimeDisplay: this.formatTime(currentTime)
         });
+        // stop clock at 0
         if (this.state.currentTime === 0) {
           this.stop();
         }
       }, 1000)
   }
+  // function used to handle clock action while clock is stopped
   stop(){
-    console.log('stop');
+    // clear countdown interval
+    clearInterval(counter);
     this.setState({
       currentClockState: 'paused'
     })
-    clearInterval(counter);
-    
+    // if current clock is for Session, and Session is over, change to break time clock
     if(this.state.currentTimeType === 'Session' && this.state.currentTime === 0){
       console.log('shit')
       // play sound
@@ -83,6 +101,7 @@ class Clock extends React.Component {
       this.start();
     }
   }
+  // function passed to controls to manage when clock should start and stop
   startStopClock(){
     if(this.state.currentClockState === 'paused'){
         this.start()
@@ -90,6 +109,7 @@ class Clock extends React.Component {
       this.stop()
     }
   }
+  // function passed to controls to reset clock to defaults
   resetClock(){
     if (this.state.currentClockState === 'running') {
       this.stop();
@@ -103,6 +123,7 @@ class Clock extends React.Component {
       color:'yellow'
     })
   }
+  // function is used to format current time to MM:SS for clock display
   formatTime(time){
     let minutes = Math.floor((time / 60000))
     let seconds = String(Math.floor((time % 60000) / 1000))
