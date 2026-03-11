@@ -21,7 +21,7 @@ class Controls extends React.Component {
             <FontAwesomeIcon icon="fa-solid fa-play" />
             <FontAwesomeIcon id="pause" icon="fa-solid fa-pause" />
         </div>
-        <FontAwesomeIcon id="reset" onClick={this.props.resetClock} icon="fa-solid fa-arrow-rotate-left" />
+        <div id="reset" onClick={this.props.resetClock}><FontAwesomeIcon style={{pointerEvents: 'none'}} icon="fa-solid fa-arrow-rotate-left" /></div>
       </div>
     )
   }

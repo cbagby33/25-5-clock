@@ -6,9 +6,6 @@ import Controls from './Controls'
 // Counter for clock interval
 let counter = null;
 
-// define beep sound
-const beep = document.getElementById('beep')
-
 // Clock component
 class Clock extends React.Component {
   constructor(props){
@@ -21,8 +18,7 @@ class Clock extends React.Component {
       currentTime: this.getMilliseconds(25), // current time in milliseconds
       currentTimeDisplay: this.formatTime(this.getMilliseconds(25)), // current time displayed on clock; used
       currentClockState: 'paused', // running or paused
-      color:'yellow', // color of clock
-      isFirstRun:true
+      color:'yellow' // color of clock
     }
 
     // methods that will be passed to child components
@@ -59,14 +55,6 @@ class Clock extends React.Component {
   
   // function used to handle clock actions while clock is running
   start(){
-    // if this is first time clock is running, add ended event listener
-    if (this.state.isFirstRun) {
-      beep.addEventListener('ended', () => {
-          // once sound is over, reset sound 
-          beep.currentTime = 0;
-      });
-      this.setState({isFirstRun: false});
-    }
     // change clock state to running
     this.setState({
       currentClockState: 'running'
@@ -86,7 +74,8 @@ class Clock extends React.Component {
         });
         // stop clock at 0
         if (this.state.currentTime === 0) {
-          this.stop();
+          setTimeout(this.stop(), 1000)
+          
         }
       }, 1000)
   }
@@ -100,8 +89,12 @@ class Clock extends React.Component {
     // if current clock is for Session, and Session is over, change to break time clock
     // otherwise do the opposite
     if(this.state.currentTime === 0){
+      // set beep to zero
+      if(document.getElementById('beep').currentTime !== 0){
+        document.getElementById('beep').currentTime = 0;
+      }
       // play sound
-      beep.play();
+      document.getElementById('beep').play();
 
       // set next state for clock 
       let nextState = {
@@ -127,11 +120,13 @@ class Clock extends React.Component {
   }
   // function passed to controls to reset clock to defaults
   resetClock(){
+    console.log('reset')
     if (this.state.currentClockState === 'running') {
       this.stop();
     }
-    if (beep.currentTime !== 0) {
-      beep.currentTime = 0;
+    if (document.getElementById('beep').currentTime !== 0) {
+      document.getElementById('beep').pause();
+      document.getElementById('beep').currentTime = 0;
     }
     this.setState({
       breakTime: 5,
@@ -158,7 +153,12 @@ class Clock extends React.Component {
       seconds = '0'+seconds
     }
 
-    return minutes+':'+seconds
+    if (time === 0) {
+      return '00:00'
+    } else{
+        return minutes+':'+seconds
+    }
+
   }
   render(){
     return(
