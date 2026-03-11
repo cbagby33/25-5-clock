@@ -17,11 +17,11 @@ class Controls extends React.Component {
   render(){
     return(
       <div id="controls">
-        <div id="play-pause" onClick={this.props.startStopClock}>
+        <div id="start_stop" onClick={this.props.startStopClock}>
             <FontAwesomeIcon icon="fa-solid fa-play" />
             <FontAwesomeIcon id="pause" icon="fa-solid fa-pause" />
         </div>
-        <FontAwesomeIcon onClick={this.props.resetClock} icon="fa-solid fa-arrow-rotate-left" />
+        <FontAwesomeIcon id="reset" onClick={this.props.resetClock} icon="fa-solid fa-arrow-rotate-left" />
       </div>
     )
   }

@@ -16,19 +16,21 @@ class TimeController extends React.Component {
 
 	// function to change duration of break/session
 	incOrDecTime(e){
-		const timeChange = e.target.id === 'decrement' ? -1 : 1;
+		const timeChangeType = e.target.id.split('-')[1]; 
+		console.log(timeChangeType)
+		const timeChange = timeChangeType === 'decrement' ? -1 : 1;
 		const type = this.props.title.split(' ')[0];
 		this.props.changeTime(timeChange, type)
 	}
-	
+
 	render(){
 		return(
 			<div className="time-choice">
-			  <div>{this.props.title}</div>
+			  <div id={this.props.title.split(' ')[0].toLowerCase()+'-label'}>{this.props.title}</div>
 			  <div className="time-setter">
-			  	<span onClick={this.incOrDecTime}><FontAwesomeIcon id="decrement" icon="fa-solid fa-minus" /></span>
-			  		{this.props.time}
-			  	<span onClick={this.incOrDecTime}><FontAwesomeIcon id="increment" icon="fa-solid fa-plus" /></span>
+			  	<div id={this.props.title.split(' ')[0].toLowerCase()+'-decrement'} className="time-change" onClick={this.incOrDecTime}><FontAwesomeIcon style={{pointerEvents: 'none'}} icon="fa-solid fa-minus" /></div>
+			  	<div id={this.props.title.split(' ')[0].toLowerCase()+'-length'}>{this.props.time}</div>
+			  	<div id={this.props.title.split(' ')[0].toLowerCase()+'-increment'} className="time-change" onClick={this.incOrDecTime}><FontAwesomeIcon style={{pointerEvents: 'none'}} icon="fa-solid fa-plus" /></div>
 			  </div>
 			</div>
 		)

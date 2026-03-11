@@ -149,9 +149,11 @@ class Clock extends React.Component {
 
   // function is used to format current time to MM:SS for clock display
   formatTime(time){
+    // convert ms to minutes and seconds
     let minutes = Math.floor((time / 60000))
     let seconds = String(Math.floor((time % 60000) / 1000))
 
+    // add leading zeros to single digit seconds 
     if(seconds.length < 2){
       seconds = '0'+seconds
     }
@@ -167,8 +169,8 @@ class Clock extends React.Component {
           <TimeController changeTime={this.changeTimeAmount} title="Session Time" time={this.state.sessionTime} />
         </div>
         <div id="timer" style={{borderColor: `${this.state.color}`}}>
-          <p style={{color: `${this.state.color}`}}>{this.state.currentTimeType}</p>
-          <div style={{color: `${this.state.color}`}}>{this.state.currentTimeDisplay}</div>
+          <p id="timer-label" style={{color: `${this.state.color}`}}>{this.state.currentTimeType}</p>
+          <div id="time-left" style={{color: `${this.state.color}`}}>{this.state.currentTimeDisplay}</div>
         </div>
         <Controls startStopClock={this.startStopClock} resetClock={this.resetClock}/>
         <audio id="beep" preload="auto" src="https://cdn.freecodecamp.org/testable-projects-fcc/audio/BeepSound.wav"></audio>
