@@ -145,19 +145,19 @@ class Clock extends React.Component {
   // function is used to format current time to MM:SS for clock display
   formatTime(time){
     // convert ms to minutes and seconds
-    let minutes = Math.floor((time / 60000))
+    let minutes = String(Math.floor((time / 60000)))
     let seconds = String(Math.floor((time % 60000) / 1000))
 
+    // add leading zeros to single digit minutes 
+    if(minutes.length < 2){
+      minutes = '0'+minutes
+    }
     // add leading zeros to single digit seconds 
     if(seconds.length < 2){
       seconds = '0'+seconds
     }
 
-    if (time === 0) {
-      return '00:00'
-    } else{
-        return minutes+':'+seconds
-    }
+    return minutes+':'+seconds
 
   }
   render(){
