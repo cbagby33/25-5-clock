@@ -11,25 +11,24 @@ library.add(fas, fab) // add library of icons
 class TimeController extends React.Component {
 	constructor(props){
 		super(props)
-		this.decrement = this.decrement.bind(this)
-		this.increment = this.increment.bind(this)
+		this.incOrDecTime = this.incOrDecTime.bind(this)
 	}
-	// decrement time
-	decrement(){
-		this.props.changeTime(-1)
+
+	// function to change duration of break/session
+	incOrDecTime(e){
+		const timeChange = e.target.id === 'decrement' ? -1 : 1;
+		const type = this.props.title.split(' ')[0];
+		this.props.changeTime(timeChange, type)
 	}
-	// increment time
-	increment(){
-		this.props.changeTime(1)
-	}
+	
 	render(){
 		return(
 			<div className="time-choice">
 			  <div>{this.props.title}</div>
 			  <div className="time-setter">
-			  	<span onClick={this.decrement}><FontAwesomeIcon icon="fa-solid fa-minus" /></span>
+			  	<span onClick={this.incOrDecTime}><FontAwesomeIcon id="decrement" icon="fa-solid fa-minus" /></span>
 			  		{this.props.time}
-			  	<span onClick={this.increment}><FontAwesomeIcon icon="fa-solid fa-plus" /></span>
+			  	<span onClick={this.incOrDecTime}><FontAwesomeIcon id="increment" icon="fa-solid fa-plus" /></span>
 			  </div>
 			</div>
 		)

@@ -15,7 +15,7 @@ class Clock extends React.Component {
     super(props)
     // Clock component state defaults
     this.state ={
-      breakTime: 5, // default countdown time for break
+      breakTime: .5, // default countdown time for break
       sessionTime:1, // default countdown time for session
       currentTimeType: 'Session', // Session or Break time
       currentTime: 3000, // current time in milliseconds
@@ -29,6 +29,11 @@ class Clock extends React.Component {
     this.changeSessionTime = this.changeSessionTime.bind(this)
     this.startStopClock = this.startStopClock.bind(this)
     this.resetClock = this.resetClock.bind(this)
+  }
+
+  // Function used to change the duration of time in session/break
+  changeTimeAmount(change, type){
+
   }
 
   // Function used to set amount of break time
@@ -142,6 +147,9 @@ class Clock extends React.Component {
   resetClock(){
     if (this.state.currentClockState === 'running') {
       this.stop();
+    }
+    if (beep.currentTime !== 0) {
+      beep.currentTime = 0;
     }
     this.setState({
       breakTime: 5,
