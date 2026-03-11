@@ -6,6 +6,9 @@ import Controls from './Controls'
 // Counter for clock interval
 let counter = null;
 
+// define beep sound
+const beep = document.getElementById('beep')
+
 // Clock component
 class Clock extends React.Component {
   constructor(props){
@@ -111,6 +114,11 @@ class Clock extends React.Component {
     // if current clock is for Session, and Session is over, change to break time clock
     if(this.state.currentTimeType === 'Session' && this.state.currentTime === 0){
       // play sound
+      beep.play();
+      // once sound is over, reset sound 
+      beep.addEventListener('ended', () => {
+          beep.currentTime = 0;
+      })
       // set state for break time
       this.setState({
           currentTimeType: 'Break',
@@ -168,6 +176,7 @@ class Clock extends React.Component {
           <div style={{color: `${this.state.color}`}}>{this.state.currentTimeDisplay}</div>
         </div>
         <Controls startStopClock={this.startStopClock} resetClock={this.resetClock}/>
+        <audio id="beep" preload="auto" src="https://cdn.freecodecamp.org/testable-projects-fcc/audio/BeepSound.wav"></audio>
       </div>
     )
   }
