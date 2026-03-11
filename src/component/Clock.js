@@ -15,11 +15,11 @@ class Clock extends React.Component {
     super(props)
     // Clock component state defaults
     this.state ={
-      breakTime: .5, // default countdown time for break
-      sessionTime:1, // default countdown time for session
+      breakTime: 5, // default countdown time for break
+      sessionTime:25, // default countdown time for session
       currentTimeType: 'Session', // Session or Break time
-      currentTime: 3000, // current time in milliseconds
-      currentTimeDisplay: '1:00', // current time displayed on clock; used
+      currentTime: 25*60000, // current time in milliseconds
+      currentTimeDisplay: this.formatTime(25*60000), // current time displayed on clock; used
       currentClockState: 'paused', // running or paused
       color:'yellow' // color of clock
     }
@@ -89,20 +89,25 @@ class Clock extends React.Component {
       currentClockState: 'paused'
     })
     // if current clock is for Session, and Session is over, change to break time clock
-    if(this.state.currentTimeType === 'Session' && this.state.currentTime === 0){
+    // otherwise do the opposite
+    if(this.state.currentTime === 0){
       // play sound
       beep.play();
       // once sound is over, reset sound 
       beep.addEventListener('ended', () => {
           beep.currentTime = 0;
       })
-      // set state for break time
-      this.setState({
-          currentTimeType: 'Break',
-          currentTime: this.state.breakTime*60000,
-          currentTimeDisplay: this.formatTime(this.state.breakTime*60000),
-          color:'yellow'
-      });
+
+      // set next state for clock 
+      let nextState = {
+        color: 'yellow'
+      };
+      nextState['currentTimeType'] = this.state.currentTimeType === 'Session' ? 'Break' : 'Session';
+      let currentTimeTypeProp = nextState['currentTimeType'].toLowerCase()+'Time';
+      nextState['currentTime'] = this.state[currentTimeTypeProp]*60000;
+      nextState['currentTimeDisplay'] = this.formatTime(nextState['currentTime']);  
+      this.setState(nextState);
+      
       // start break
       this.start();
     }
