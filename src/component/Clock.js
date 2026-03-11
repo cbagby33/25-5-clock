@@ -30,28 +30,50 @@ class Clock extends React.Component {
 
   // Function used to set amount of break time
   changeBreakTime(change){
-    // change is +1 or -1
-    // set new time based on incrementing or decrementing time
-    let time = this.state.breakTime+(change)
-    // only allow time to be set between 1 and 60 
-    if(time >= 1 && time <=60){
-      this.setState({
-        breakTime:time
-      });
+    // Only change if clock not running
+    if (this.state.currentClockState === 'paused') {
+      // change is +1 or -1
+      // set new time based on incrementing or decrementing time
+      let time = this.state.breakTime+(change)
+      // only allow time to be set between 1 and 60 
+      if(time >= 1 && time <=60){
+        this.setState({
+          breakTime:time
+        });
+        if (this.state.currentTimeType === 'Break') {
+          this.setState({
+            currentTime: time*60000,
+            currentTimeDisplay: this.formatTime(time*60000)    
+          })
+          if(this.state.color === "red"){
+            this.state.color = 'yellow'
+          }
+        }
+      }
     }
   }
   // Function used to set amount of session time
   changeSessionTime(change){
-    // change is +1 or -1
-    // set new time based on incrementing or decrementing time
-    let time = this.state.sessionTime+(change)
-    // only allow time to be set between 1 and 60 
-    if(time >= 1 && time <=60){
-      this.setState({
-        sessionTime:time,
-        currentTime: time*60000,
-        currentTimeDisplay: this.formatTime(time*60000)
-      });
+    // Only change if clock not running
+    if (this.state.currentClockState === 'paused') {
+      // change is +1 or -1
+      // set new time based on incrementing or decrementing time
+      let time = this.state.sessionTime+(change)
+      // only allow time to be set between 1 and 60 
+      if(time >= 1 && time <=60){
+        this.setState({
+          sessionTime:time,
+        });
+        if (this.state.currentTimeType === 'Session') {
+          this.setState({
+            currentTime: time*60000,
+            currentTimeDisplay: this.formatTime(time*60000)    
+          })
+        }
+        if(this.state.color === "red"){
+          this.state.color = 'yellow'
+        }
+      }
     }
   }
   // function used to handle clock actions while clock is running
@@ -88,7 +110,6 @@ class Clock extends React.Component {
     })
     // if current clock is for Session, and Session is over, change to break time clock
     if(this.state.currentTimeType === 'Session' && this.state.currentTime === 0){
-      console.log('shit')
       // play sound
       // set state for break time
       this.setState({
