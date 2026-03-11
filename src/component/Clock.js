@@ -18,10 +18,11 @@ class Clock extends React.Component {
       breakTime: 5, // default countdown time for break
       sessionTime:25, // default countdown time for session
       currentTimeType: 'Session', // Session or Break time
-      currentTime: 25*60000, // current time in milliseconds
-      currentTimeDisplay: this.formatTime(25*60000), // current time displayed on clock; used
+      currentTime: this.getMilliseconds(25), // current time in milliseconds
+      currentTimeDisplay: this.formatTime(this.getMilliseconds(25)), // current time displayed on clock; used
       currentClockState: 'paused', // running or paused
-      color:'yellow' // color of clock
+      color:'yellow', // color of clock
+      isFirstRun:true
     }
 
     // methods that will be passed to child components
@@ -45,8 +46,8 @@ class Clock extends React.Component {
         this.setState(newTimeState);
         if (this.state.currentTimeType === type) {
           this.setState({
-            currentTime: time*60000,
-            currentTimeDisplay: this.formatTime(time*60000)    
+            currentTime: this.getMilliseconds(time),
+            currentTimeDisplay: this.formatTime(this.getMilliseconds(time))    
           })
           if(this.state.color === "red"){
             this.state.color = 'yellow'
@@ -58,6 +59,14 @@ class Clock extends React.Component {
   
   // function used to handle clock actions while clock is running
   start(){
+    // if this is first time clock is running, add ended event listener
+    if (this.state.isFirstRun) {
+      beep.addEventListener('ended', () => {
+          // once sound is over, reset sound 
+          beep.currentTime = 0;
+      });
+      this.setState({isFirstRun: false});
+    }
     // change clock state to running
     this.setState({
       currentClockState: 'running'
@@ -66,7 +75,7 @@ class Clock extends React.Component {
     counter = setInterval(() => {
         // update current time every second
         let currentTime = this.state.currentTime - 1000
-        if(currentTime < 60000 && this.state.color === 'yellow'){ // change clock to red when time is under a min
+        if(currentTime < this.getMilliseconds(1) && this.state.color === 'yellow'){ // change clock to red when time is under a min
           this.setState({
             color:'red'
           })
@@ -93,10 +102,6 @@ class Clock extends React.Component {
     if(this.state.currentTime === 0){
       // play sound
       beep.play();
-      // once sound is over, reset sound 
-      beep.addEventListener('ended', () => {
-          beep.currentTime = 0;
-      })
 
       // set next state for clock 
       let nextState = {
@@ -104,7 +109,7 @@ class Clock extends React.Component {
       };
       nextState['currentTimeType'] = this.state.currentTimeType === 'Session' ? 'Break' : 'Session';
       let currentTimeTypeProp = nextState['currentTimeType'].toLowerCase()+'Time';
-      nextState['currentTime'] = this.state[currentTimeTypeProp]*60000;
+      nextState['currentTime'] = this.getMilliseconds(this.state[currentTimeTypeProp]);
       nextState['currentTimeDisplay'] = this.formatTime(nextState['currentTime']);  
       this.setState(nextState);
       
@@ -132,11 +137,16 @@ class Clock extends React.Component {
       breakTime: 5,
       sessionTime:25,
       currentTimeType: 'Session',
-      currentTime: 25*60000,
-      currentTimeDisplay: this.formatTime(25*60000),
+      currentTime: this.getMilliseconds(25),
+      currentTimeDisplay: this.formatTime(this.getMilliseconds(25)),
       color:'yellow'
     })
   }
+  // function to turn minutes into milliseconds
+  getMilliseconds(time){
+    return time*60000
+  }
+
   // function is used to format current time to MM:SS for clock display
   formatTime(time){
     let minutes = Math.floor((time / 60000))

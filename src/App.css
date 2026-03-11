@@ -53,6 +53,7 @@ body{
   justify-content: center;
   align-items: center;
   font-size: 1.5em;
+  cursor: pointer;
 }
 #pause{
   margin-left: -11px; 
