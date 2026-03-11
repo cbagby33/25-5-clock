@@ -17,7 +17,7 @@ class TimeController extends React.Component {
 	// function to change duration of break/session
 	incOrDecTime(e){
 		const timeChangeType = e.target.id.split('-')[1]; 
-		console.log(timeChangeType)
+		// console.log(timeChangeType)
 		const timeChange = timeChangeType === 'decrement' ? -1 : 1;
 		const type = this.props.title.split(' ')[0];
 		this.props.changeTime(timeChange, type)
