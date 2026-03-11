@@ -15,7 +15,8 @@ class Clock extends React.Component {
       breakTime: 5, // default countdown time for break
       sessionTime:25, // default countdown time for session
       currentTimeType: 'Session', // Session or Break time
-      currentTime: this.getMilliseconds(25), // current time in milliseconds
+      // currentTime: this.getMilliseconds(25), // current time in milliseconds
+      currentTime: this.getMilliseconds(.05), // current time in milliseconds
       currentTimeDisplay: this.formatTime(this.getMilliseconds(25)), // current time displayed on clock; used
       currentClockState: 'paused', // running or paused
       color:'yellow' // color of clock
@@ -121,13 +122,14 @@ class Clock extends React.Component {
   // function passed to controls to reset clock to defaults
   resetClock(){
     console.log('reset')
+    document.getElementById('beep').pause();
+    document.getElementById('beep').currentTime = 0;
+    console.log(document.getElementById('beep').paused)
+
     if (this.state.currentClockState === 'running') {
       this.stop();
     }
-    if (document.getElementById('beep').currentTime !== 0) {
-      document.getElementById('beep').pause();
-      document.getElementById('beep').currentTime = 0;
-    }
+    console.log(document.getElementById('beep').currentTime)
     this.setState({
       breakTime: 5,
       sessionTime:25,
